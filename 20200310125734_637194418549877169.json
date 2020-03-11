@@ -1,0 +1,41 @@
+{
+  "EventType": "DataContext",
+  "Environment": {
+    "UserName": "sebastian.schueler",
+    "MachineName": "CLI-DRE-SCSE",
+    "DomainName": "FAUSERAG",
+    "CallingMethodName": "AngularWeb.Data.DataContext.SaveChanges()",
+    "AssemblyName": "AngularWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "Culture": "de-DE"
+  },
+  "StartDate": "2020-03-10T12:57:34.8427043",
+  "EndDate": "2020-03-10T12:57:34.9858394",
+  "Duration": 143,
+  "EntityFrameworkEvent": {
+    "Database": "newERP",
+    "Entries": [
+      {
+        "Table": "WeatherForecast",
+        "Action": "Insert",
+        "PrimaryKey": {
+          "Id": "1f03e46c-a093-44da-5fa8-08d7c4f299f7"
+        },
+        "ColumnValues": {
+          "Id": "1f03e46c-a093-44da-5fa8-08d7c4f299f7",
+          "Created": "2020-03-10T12:57:34.1222012Z",
+          "CreatedBy": "21a56184-0170-4d04-9280-0a57729a62d5",
+          "Date": "2020-03-10T12:57:31.6824641Z",
+          "LastUpdated": "0001-01-01T00:00:00",
+          "Modified": "2020-03-10T12:57:34.1141557Z",
+          "ModifiedBy": "21a56184-0170-4d04-9280-0a57729a62d5",
+          "Summary": "neu",
+          "TemperatureC": 35,
+          "UserId": "21a56184-0170-4d04-9280-0a57729a62d5"
+        },
+        "Valid": true
+      }
+    ],
+    "Result": 1,
+    "Success": true
+  }
+}
