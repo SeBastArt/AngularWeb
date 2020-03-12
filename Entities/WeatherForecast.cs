@@ -22,7 +22,7 @@ namespace AngularWeb.Entities
         public string Summary { get; set; }
         [JsonIgnore]
         public long UserId { get; set; }
-        public AngularWeb.Entities.User.User User { get; set; }
+        public User User { get; set; }
 }
 
     public class WeatherForecastConfiguration : IEntityTypeConfiguration<WeatherForecast>

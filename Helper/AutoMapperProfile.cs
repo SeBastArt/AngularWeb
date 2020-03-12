@@ -1,5 +1,4 @@
 ﻿using AngularWeb.Entities;
-using AngularWeb.Entities.User;
 using AngularWeb.Models;
 using AngularWeb.Models.User;
 using AutoMapper;

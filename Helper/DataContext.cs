@@ -8,9 +8,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Globalization;
-using AngularWeb.Entities.Address;
-using AngularWeb.Entities.User;
-
 namespace AngularWeb.Data
 {
     public class DataContext : AuditDbContext
@@ -20,14 +17,34 @@ namespace AngularWeb.Data
         private readonly IHttpContextAccessor _httpContextAccessor;
 
 
+        //Document
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<DocumentPosition> DocumentPositions { get; set; }
+
+        //Address
+        public DbSet<Address> Addresss { get; set; }
+        public DbSet<AddressCompanyType> AddressCompanyTypes { get; set; }
+        public DbSet<AddressCountry> AddressCountries { get; set; }
+        public DbSet<AddressPerson> AddresssPersons { get; set; }
+        
+
+        //Article
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<ArticleGroup> ArticleGroups { get; set; }
+        public DbSet<ArticleInventory> ArticleInventorys { get; set; }
+        public DbSet<ArticlePlace> ArticlePlaces { get; set; }
+        public DbSet<ArticlePriceListIn> ArticlePriceListIns { get; set; }
+        public DbSet<ArticlePriceListOut> ArticlePriceListOuts { get; set; }
+        public DbSet<ArticleRange> ArticleRanges { get; set; }
+        public DbSet<ArticleText> ArticleTexts { get; set; }
+        public DbSet<ArticleType> ArticleType { get; set; }
+
+        //Misc
+        public DbSet<FAGBinary> FagBinarys { get; set; }
         public DbSet<User> Users { get; set; }
-    
-        public DbSet<AddressCountry> addressCountries { get; set; }
-        public DbSet<AddressCompanyType> addressCompanyTypes { get; set; }
-        public DbSet<FAGBinary> fagBinarys { get; set; }
-        public DbSet<Address> addresss { get; set; }
         public DbSet<WeatherForecast> WeatherForecasts { get; set; }
         public DbSet<Audit_WeatherForecast> AuditWeatherForecasts { get; set; }
+
 
         public DataContext(IConfiguration configuration, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor)
         {
@@ -69,10 +86,20 @@ namespace AngularWeb.Data
                     .WithMany(c => c.AddressPersonRelations)
                     .HasForeignKey(bc => bc.AddressPersonId);
 
+                //modelBuilder.Entity<ArticleType>()
+                //.HasOne(b => b.Article)
+                //.WithOne(a => a.ArticleType)
+                //.IsRequired()
+                //.OnDelete(DeleteBehavior.NoAction);
 
                 modelBuilder.ApplyConfiguration(new UserConfiguration());
                 modelBuilder.ApplyConfiguration(new WeatherForecastConfiguration());
                 modelBuilder.ApplyConfiguration(new Audit_WeatherForecastConfiguration());
+
+                foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+                {
+                    relationship.DeleteBehavior = DeleteBehavior.Restrict;
+                }
             }
 
             base.OnModelCreating(modelBuilder);

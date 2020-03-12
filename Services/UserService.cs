@@ -1,7 +1,6 @@
 ﻿using AngularWeb.Data;
 using AngularWeb.Entities;
 using AngularWeb.Helper;
-using AngularWeb.Entities.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;

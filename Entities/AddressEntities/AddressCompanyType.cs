@@ -8,7 +8,7 @@ namespace AngularWeb.Entities
 {
     [Table("address_company_type")]
     public class AddressCompanyType : BaseEntity
-    {   
+    {
         [Column("id")]
         public long AddressCompanyTypeId { get; set; }
 

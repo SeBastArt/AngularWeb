@@ -9,7 +9,6 @@ namespace AngularWeb.Entities
     public class BaseEntity
     {
         [Column("created")]
-
         public virtual DateTime Created { get; set; }
        
         [Column("modified")]

@@ -4,14 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AngularWeb.Entities.Address
+namespace AngularWeb.Entities
 {
     [Table("address_person")]
     public class AddressPerson : BaseEntity
     {
         [Column("id")]
         public long AddressPersonId { get; set; }
-
 
         [Column("lastname", TypeName = "varchar(max)")]
         public virtual string LastName { get; set; }
@@ -34,11 +33,12 @@ namespace AngularWeb.Entities.Address
         [Column("email", TypeName = "varchar(max)")]
         public virtual string Email { get; set; }
 
+        [Column("fk_picture")]
         public virtual long? PictureId { get; set; }
 
-        [Column("fk_picture", TypeName = "varchar(max)")]
+        [Column(TypeName = "varchar(max)")]
         public virtual FAGBinary Picture { get; set; }
 
-        public ICollection<AddressPersonRelation> AddressPersonRelations { get; set; }
+        public ICollection<AddressPersonRelation> AddressPersonRelations { get; } = new List<AddressPersonRelation>();
     }
 }

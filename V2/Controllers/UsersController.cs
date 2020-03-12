@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using AngularWeb.Data;
 using AngularWeb.Entities;
-using AngularWeb.Entities.User;
 using AngularWeb.Helper;
 using AngularWeb.Models;
 using AngularWeb.Models.User;
@@ -83,7 +82,7 @@ namespace AngularWeb.V2.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Id.ToString(CultureInfo.InvariantCulture)),
                     new Claim(ClaimTypes.Role, user.Role)
                 }),
                 Expires = DateTime.Now.AddDays(7),
@@ -124,7 +123,7 @@ namespace AngularWeb.V2.Controllers
 
         [Authorize(Roles = Role.Admin)]
         [HttpGet]
-        public IActionResult GetAll(int? page = null, int pageSize = 10, string orderBy = nameof(AngularWeb.Entities.User.User.Id), bool ascending = true)
+        public IActionResult GetAll(int? page = null, int pageSize = 10, string orderBy = nameof(AngularWeb.Entities.User.Id), bool ascending = true)
         {
             if (page == null) { 
                 return Ok(_context.Users);

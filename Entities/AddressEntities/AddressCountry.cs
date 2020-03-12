@@ -8,7 +8,7 @@ namespace AngularWeb.Entities
     {
         [Column("id")]
         public long AddressCountryId { get; set; }
-        
+
         [Column("iso_3cc", TypeName = "varchar(3)")]
         public string Iso3cc { get; set; }
         

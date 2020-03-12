@@ -7,7 +7,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AngularWeb.Entities;
-using AngularWeb.Entities.User;
 using AngularWeb.Helper;
 using AngularWeb.Models;
 using AngularWeb.Models.User;
@@ -91,10 +90,10 @@ namespace AngularWeb.V1.Controllers
 
             return Ok(new
             {
-                Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                user.Id,
+                user.Username,
+                user.FirstName,
+                user.LastName,
                 Token = tokenString
             });
         }
@@ -146,6 +145,8 @@ namespace AngularWeb.V1.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Update(int id, [FromBody]UpdateModel model)
         {
+            if (model == null) return BadRequest(new { message = "invalid input" });
+
             // map model to entity and set id
             var user = _mapper.Map<User>(model);
             //user.Id = id;
