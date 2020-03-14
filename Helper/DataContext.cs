@@ -75,6 +75,12 @@ namespace AngularWeb.Data
         {
             if (modelBuilder != null)
             {
+                modelBuilder.Entity<User>()
+                    .HasMany(c => c.WeatherForecasts)
+                    .WithOne(e => e.User);
+
+
+
                 modelBuilder.Entity<AddressPersonRelation>()
                     .HasKey(bc => new { bc.AddressId, bc.AddressPersonId });
                 modelBuilder.Entity<AddressPersonRelation>()

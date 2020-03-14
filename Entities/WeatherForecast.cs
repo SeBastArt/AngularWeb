@@ -20,9 +20,10 @@ namespace AngularWeb.Entities
         public int TemperatureC { get; set; }
         [Column("summar_y", TypeName = "varchar(100)")]
         public string Summary { get; set; }
-        [JsonIgnore]
+        
+        [Column("user_id")]
         public long UserId { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
 }
 
     public class WeatherForecastConfiguration : IEntityTypeConfiguration<WeatherForecast>

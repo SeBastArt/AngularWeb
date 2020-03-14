@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using AngularWeb.V2.Controllers;
 using AutoMapper;
 using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 
 namespace AngularWeb.V2.Controllers
 {
@@ -23,7 +24,6 @@ namespace AngularWeb.V2.Controllers
     {
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IDiagnosticContext _diagnosticContext;
-        private readonly IMapper _mapper;
         private readonly DataContext _context;
 
         public WeatherForecastController(
@@ -53,14 +53,16 @@ namespace AngularWeb.V2.Controllers
             //_context.WeatherForecast.Add(wf);
             user.WeatherForecasts.Add(wf);
             //var _WeatherForecast = new WeatherForecast { Date = DateTime.UtcNow, TemperatureC = 35, Summary = "neu" };
-           
+
             //_context.WeatherForecast.Add(_WeatherForecast);
             _context.SaveChanges();
-
+            
             if (page == null)
             {
-                var weatherForecast = user.WeatherForecasts;
-                return Ok(weatherForecast);
+                var test = _context.Users.Include(user => user.WeatherForecasts).SingleOrDefault(x => x.Id == currentUserId);
+                return Ok(new WeatherForecastResult{
+                    Results = _mapper.Map<List<WeatherForecastModel>>(test.WeatherForecasts.ToList())
+                });
             }
 
             var pagedUsers = CreatePagedResults<WeatherForecast, WeatherForecastModel>

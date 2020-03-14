@@ -21,9 +21,9 @@ namespace AngularWeb.Entities
         public virtual long ModifiedBy { get; set; }
 
         [Column("info", TypeName = "varchar(max)")]
-        public virtual string Info { get; set; }
+        public string Info { get; set; } = "";
 
         [Column("info_rtf", TypeName = "varchar(max)")]
-        public virtual string InfoRtf { get; set; }
+        public string InfoRtf { get; set; } = "";
     }
 }
