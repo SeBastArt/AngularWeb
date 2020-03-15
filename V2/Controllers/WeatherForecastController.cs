@@ -13,10 +13,11 @@ using AngularWeb.V2.Controllers;
 using AutoMapper;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace AngularWeb.V2.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [ApiVersion("2.0")]
     [Route("api/[controller]")]

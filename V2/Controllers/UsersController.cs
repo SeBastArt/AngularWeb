@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,10 +20,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using AngularWeb.Models.Users;
 
 namespace AngularWeb.V2.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiVersion("2.0")]
@@ -38,7 +42,7 @@ namespace AngularWeb.V2.Controllers
             DataContext context,
             IUserService userService,
             IMapper mapper,
-            IOptions<AppSettings> appSettings) : base (mapper)
+            IOptions<AppSettings> appSettings) : base(mapper)
         {
             _userService = userService;
             _context = context;
@@ -49,24 +53,12 @@ namespace AngularWeb.V2.Controllers
         /// <summary>
         /// Authenticate a user an give back a bearer token 
         /// </summary>
-        /// /// <remarks>
-        /// Sample request:
-        ///
-        ///     POST /Todo
-        ///     {
-        ///        "username": "Norbert",
-        ///        "password": "passwird"
-        ///     }
-        ///
-        /// </remarks>
-        /// <param name="model"></param>
-        /// <returns>A newly created TodoItem</returns>
         /// <response code="200">Returns the newly created barer token and user</response>
         /// <response code="401">Wrong password</response>     
+        [ProducesResponseType(typeof(ValidUserModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorHandlingModel), StatusCodes.Status401Unauthorized)]
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
         {
             User user  = null;
@@ -74,7 +66,7 @@ namespace AngularWeb.V2.Controllers
                 user = _userService.Authenticate(model.UserName, model.Password);
 
             if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest(new ErrorHandlingModel { Errors = new List<Error> { new Error { ErrorMessage = "User not found or password incorrect", ErrorCode = 401 } } });
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -92,16 +84,20 @@ namespace AngularWeb.V2.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(new
+            return Ok(new ValidUserModel
             {
-                Id = user.Id,
+                UserId = user.Id,
                 Username = user.Username,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Token = tokenString
             });
         }
-
+        /// <summary>
+        /// Register a new User
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>nothing</returns>
         [AllowAnonymous]
         [HttpPost("register")]
         public IActionResult Register([FromBody]RegisterModel model)

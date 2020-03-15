@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Http;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace AngularWeb
 {
@@ -78,6 +79,8 @@ namespace AngularWeb
                         Scheme = "bearer" //The name of the HTTP Authorization scheme to be used in the Authorization header. In this case "bearer".
                     });
 
+                options.ExampleFilters();
+
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement{
                     {
                         new OpenApiSecurityScheme{
@@ -95,7 +98,7 @@ namespace AngularWeb
                 // integrate xml comments
                 options.IncludeXmlComments(XmlCommentsFilePath);
             });
-
+            services.AddSwaggerExamplesFromAssemblyOf<Startup>();
 
             services.AddDbContext<DataContext>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -197,6 +200,7 @@ namespace AngularWeb
                     foreach (var description in provider.ApiVersionDescriptions)
                     {
                         options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                        
                     }
                 });
 
