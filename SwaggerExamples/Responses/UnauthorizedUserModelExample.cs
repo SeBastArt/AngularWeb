@@ -1,5 +1,7 @@
 ﻿using Swashbuckle.AspNetCore.Filters;
 using AngularWeb.Models.Users;
+using System.Collections.Generic;
+using AngularWeb.Models;
 
 namespace AngularWeb.SwaggerExamples.Responses
 {
@@ -9,8 +11,11 @@ namespace AngularWeb.SwaggerExamples.Responses
         {
             return new UnauthorizedUserModel
             {
-                ErrorCode = 401,
-                ErrorMessage = "Wrong Username or Password"
+                Errors =
+                 new List<Error>
+                 {
+                     new Error { ErrorMessage = "Unauthorized", ErrorCode = 401 },
+                 }
             };
         }
     }

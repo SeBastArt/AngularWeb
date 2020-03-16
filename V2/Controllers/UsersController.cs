@@ -54,9 +54,9 @@ namespace AngularWeb.V2.Controllers
         /// Authenticate a user an give back a bearer token 
         /// </summary>
         /// <response code="200">Returns the newly created barer token and user</response>
-        /// <response code="401">Wrong password</response>     
+        /// <response code="400">User not found or password incorrect</response>     
         [ProducesResponseType(typeof(ValidUserModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorHandlingModel), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(UnauthorizedUserModel), StatusCodes.Status401Unauthorized)]
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
@@ -66,7 +66,7 @@ namespace AngularWeb.V2.Controllers
                 user = _userService.Authenticate(model.UserName, model.Password);
 
             if (user == null)
-                return BadRequest(new ErrorHandlingModel { Errors = new List<Error> { new Error { ErrorMessage = "User not found or password incorrect", ErrorCode = 401 } } });
+                return Unauthorized(new UnauthorizedUserModel { Errors = new List<Error> { new Error { ErrorMessage = "Unauthorized", ErrorCode = 401 } } });
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -139,7 +139,7 @@ namespace AngularWeb.V2.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(Guid id, [FromBody]UpdateModel model)
+        public IActionResult Update(long id, [FromBody]UpdateModel model)
         {
             // map model to entity and set id
             var user = _mapper.Map<User>(model);

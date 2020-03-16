@@ -28,6 +28,8 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Http;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 
 namespace AngularWeb
 {
@@ -48,13 +50,13 @@ namespace AngularWeb
             {
                 opts.Filters.Add<SerilogLoggingActionFilter>();
             });
-
+          
             services.AddApiVersioning(
-              options =>
-              {
-                    // reporting api versions will return the headers "api-supported-versions" and "api-deprecated-versions"
-                    options.ReportApiVersions = true;
-              });
+                  options =>
+                  {
+                        // reporting api versions will return the headers "api-supported-versions" and "api-deprecated-versions"
+                        options.ReportApiVersions = true;
+                  });
             services.AddVersionedApiExplorer(
                 options =>
                 {

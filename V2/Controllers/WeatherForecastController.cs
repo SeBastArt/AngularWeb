@@ -14,13 +14,18 @@ using AutoMapper;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using AngularWeb.Models.WeatherForecast;
+using AngularWeb.Models.Users;
+using System.Net.Mime;
 
 namespace AngularWeb.V2.Controllers
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [ApiController]
-    [ApiVersion("2.0")]
+    [Produces("application/json")]
     [Route("api/[controller]")]
+    [ApiVersion("2.0")]
+    [ApiController]
     public class WeatherForecastController : BaseController
     {
         private readonly ILogger<WeatherForecastController> _logger;
@@ -40,9 +45,21 @@ namespace AngularWeb.V2.Controllers
            
         }
 
+
+        /// <summary>
+        /// returns the weatherforecasts for current user
+        /// possibility for pagination
+        /// if page is null then no pagination is given
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="ascending"></param>
+        /// <response code="200">Returns all the weatherforecasts an the newly created one</response>
+        /// <response code="401">Unauthorized</response>     
+        [ProducesResponseType(typeof(WeatherForecastPagedResultsModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UnauthorizedUserModel), StatusCodes.Status401Unauthorized)]
         [HttpGet]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(IEnumerable<WeatherForecast>), 200)]
         public IActionResult GetAll(int? page = null, int pageSize = 10, string orderBy = nameof(AngularWeb.Entities.WeatherForecast.WeatherForecastId), bool ascending = true)
         {
             _logger.LogWarning("I dare you");
@@ -51,11 +68,7 @@ namespace AngularWeb.V2.Controllers
             var user = _context.Users.Find(currentUserId);
             var wf = new WeatherForecast { Date = DateTime.UtcNow, TemperatureC = 35, Summary = "neu" };
 
-            //_context.WeatherForecast.Add(wf);
             user.WeatherForecasts.Add(wf);
-            //var _WeatherForecast = new WeatherForecast { Date = DateTime.UtcNow, TemperatureC = 35, Summary = "neu" };
-
-            //_context.WeatherForecast.Add(_WeatherForecast);
             _context.SaveChanges();
             
             if (page == null)

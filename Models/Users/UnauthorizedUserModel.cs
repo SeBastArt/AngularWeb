@@ -7,7 +7,6 @@ namespace AngularWeb.Models.Users
 {
     public class UnauthorizedUserModel
     {
-        public int ErrorCode { get; set; }
-        public string ErrorMessage { get; set; }
+        public List<Error> Errors { get; set; }
     }
 }
