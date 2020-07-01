@@ -62,11 +62,10 @@ namespace AngularWeb.V2.Controllers
         [HttpGet]
         public IActionResult GetAll(int? page = null, int pageSize = 10, string orderBy = nameof(AngularWeb.Entities.WeatherForecast.WeatherForecastId), bool ascending = true)
         {
-            _logger.LogWarning("I dare you");
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             var currentUserId = long.Parse(User.Identity.Name, NumberStyles.Number, CultureInfo.InvariantCulture);
             var user = _context.Users.Find(currentUserId);
-            var wf = new WeatherForecast { Date = DateTime.UtcNow, TemperatureC = 35, Summary = "neu" };
+            var wf = new WeatherForecast { Date = DateTime.UtcNow, TemperatureC = 35, Summary = "neu", UserId = currentUserId };
 
             user.WeatherForecasts.Add(wf);
             _context.SaveChanges();

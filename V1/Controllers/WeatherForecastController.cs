@@ -39,11 +39,9 @@ namespace AngularWeb.V1.Controllers
         [ProducesResponseType(typeof(IEnumerable<WeatherForecast>), 200)]
         public IEnumerable<WeatherForecast> Get()
         {
-            _logger.LogWarning("I dare you");
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             var currentUserId = int.Parse(User.Identity.Name);
-          
-            var _WeatherForecast = new WeatherForecast { Date = DateTime.UtcNow, TemperatureC = 35, Summary = "neu" };
+            var _WeatherForecast = new WeatherForecast { Date = DateTime.UtcNow, TemperatureC = 35, Summary = "neu", UserId = currentUserId };
             _context.WeatherForecasts.Add(_WeatherForecast);
             _context.SaveChanges();
             return _context.WeatherForecasts;
